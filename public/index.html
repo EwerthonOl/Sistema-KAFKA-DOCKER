@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web App Sensor-Analista</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+      integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.1/socket.io.js"
+      integrity="sha512-Z6C1p1NIexPj5MsVUunW4pg7uMX6/TT3CUVldmjXx2kpip1eZcrAnxIusDxyFIikyM9A61zOVNgvLr/TGudOQg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+
+  <body style="background-color: papayawhip">
+    <section class="container p-5 d-flex justify-content-between">
+      <div class="card p-2 shadow border-warning">
+        <h5 class="card-header text-warning">Sensor iOT</h5>
+        <div class="card-body">
+          <h5 class="card-title">Dados enviados</h5>
+          <div class="sensor"></div>
+        </div>
+      </div>
+
+      <div class="card p-2 shadow border-info">
+        <h5 class="card-header text-info">Analista do sensor</h5>
+        <div class="card-body">
+          <h5 class="card-title">Processamento de dados do sensor</h5>
+          <div class="analista" style="max-height: 100px"></div>
+        </div>
+      </div>
+    </section>
+
+    <script type="text/javascript">
+      //cria um socket para ouvir na pagina
+      var socket = io('http://localhost:3000')
+
+      //função para mostrar dados do sensor na pagina
+      function renderMessageSensor(message) {
+        $('.sensor').append('<p class="card-text">' + message.value + '</p>')
+      }
+
+      //função para mostrar dados do analista na pagina
+      function renderMessageAnalista(message) {
+        $('.analista').html(
+          '<p class="card-text" style="max-height: 100px"> Valor mínimo recebido: ' +
+            message.ValorMinimoDoSensor +
+            '</p>'
+        )
+
+        $('.analista').append(
+          '<p class="card-text"> Valor médio recebido: ' +
+            message.ValorMedioDeTodosRecebidos +
+            '</p>'
+        )
+
+        $('.analista').append(
+          '<p class="card-text"> Valor máximo recebido: ' +
+            message.ValorMaximoDoSensor +
+            '</p>'
+        )
+      }
+
+      //ao receber dados do sensor, ativa a função do sensor na pagina
+      socket.on('sensor-data', function (data) {
+        renderMessageSensor(data)
+        console.log(data)
+      })
+
+      //ao receber dados do analista, ativa a função do analista na pagina
+      socket.on('processed-data', function (data) {
+        renderMessageAnalista(data)
+        console.log(data)
+      })
+    </script>
+  </body>
+</html>
