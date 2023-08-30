@@ -42,7 +42,7 @@ O código deste aplicativo web está explicado abaixo:
 * `public/index.html`: Este arquivo contém o código HTML com Bootstrap do aplicativo da web.
 * `sensor.js`: Este arquivo contém o código do sensor. O sensor gera valores aleatórios e os envia para um tópico Kafka.
 
-### Tecnologias utilizadas
+### Principais tecnologias utilizadas
 
 [HTML](https://developer.mozilla.org/pt-BR/docs/Web/HTML)
 [CSS](https://developer.mozilla.org/pt-BR/docs/Web/CSS)
